@@ -1,0 +1,50 @@
+{
+  "name": "middl",
+  "version": "0.0.0",
+  "description": "A generic middleware library, inspired by Express and suitable for anything",
+  "main": "src/index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "xo && nyc --reporter=lcov --reporter=text ava",
+    "coverage": "nyc report --reporter=text-lcov"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/joakimbeng/middl.git"
+  },
+  "keywords": [
+    "express",
+    "middleware",
+    "match",
+    "use",
+    "byoe"
+  ],
+  "author": {
+    "name": "Joakim Carlstein",
+    "email": "joakim@beng.se",
+    "url": "http://joakim.beng.se"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/joakimbeng/middl/issues"
+  },
+  "homepage": "https://github.com/joakimbeng/middl#readme",
+  "xo": {
+    "envs": [
+      "node"
+    ]
+  },
+  "devDependencies": {
+    "ava": "^0.13.0",
+    "coveralls": "^2.11.9",
+    "nyc": "^6.1.1",
+    "xo": "^0.13.0"
+  },
+  "dependencies": {
+    "is-regexp": "^1.0.0",
+    "object-assign": "^4.0.1",
+    "path-to-regexp": "^1.2.1"
+  }
+}

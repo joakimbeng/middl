@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="512px" height="256px" viewBox="0 0 512 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.5.2 (25235) - http://www.bohemiancoding.com/sketch -->
+    <title>middl</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="middl" sketch:type="MSArtboardGroup" stroke="#7CD3A1" stroke-opacity="0.75" stroke-width="2" fill="#DEEECC">
+            <rect id="Rectangle-1" sketch:type="MSShapeGroup" x="41" y="98" width="30" height="100"></rect>
+            <rect id="Rectangle-1" sketch:type="MSShapeGroup" x="81" y="98" width="30" height="100"></rect>
+            <rect id="Rectangle-1" sketch:type="MSShapeGroup" x="121" y="98" width="30" height="100"></rect>
+            <rect id="Rectangle-1" sketch:type="MSShapeGroup" x="181" y="98" width="30" height="100"></rect>
+            <rect id="Rectangle-1" sketch:type="MSShapeGroup" x="241" y="98" width="30" height="100"></rect>
+            <rect id="Rectangle-1" sketch:type="MSShapeGroup" x="281" y="58" width="30" height="140"></rect>
+            <rect id="Rectangle-1" sketch:type="MSShapeGroup" x="341" y="98" width="30" height="100"></rect>
+            <rect id="Rectangle-1" sketch:type="MSShapeGroup" x="381" y="58" width="30" height="140"></rect>
+            <rect id="Rectangle-1" sketch:type="MSShapeGroup" x="441" y="58" width="30" height="140"></rect>
+            <rect id="Rectangle-1" sketch:type="MSShapeGroup" x="181" y="58" width="30" height="30"></rect>
+        </g>
+    </g>
+</svg>
