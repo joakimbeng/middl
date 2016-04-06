@@ -1,4 +1,6 @@
 'use strict';
+var co = require('co');
+var isGeneratorFn = require('is-generator-fn');
 var isRegexp = require('is-regexp');
 var objectAssign = require('object-assign');
 var pathToRegexp = require('path-to-regexp');
@@ -123,20 +125,24 @@ module.exports = exports = function middl(options) {
 		function next(err) {
 			var m = filteredStack[i++];
 			var fn = m && m.fn;
-			if ((!fn || fn.length !== 4) && err) {
+			var fnLen = fn && fn.length;
+			if ((!fn || fnLen !== 4) && err) {
 				throw err;
 			}
 			if (!fn) {
 				return output;
 			}
+			if (isGeneratorFn(fn)) {
+				fn = co.wrap(fn);
+			}
 			var nextInput = getNextInput(m, input, options);
-			if (fn.length === 4) {
+			if (fnLen === 4) {
 				return Promise.resolve(fn(err, nextInput, output, next))
 					.then(function () {
 						return output;
 					});
 			}
-			if (fn.length === 3) {
+			if (fnLen === 3) {
 				return Promise.resolve(fn(nextInput, output, next))
 					.then(function () {
 						return output;

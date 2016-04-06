@@ -55,7 +55,14 @@ app.use((input, output) => {
 			console.log('Done in %s ms', ms);
 		});
 });
-// or even prettier when using Babel and async/await:
+// or even prettier with generator functions:
+app.use(function *(input, output) {
+	var start = new Date();
+	yield next();
+	var ms = new Date() - start;
+	console.log('Done in %s ms', ms);
+});
+// or when using Babel and async/await:
 app.use(async (input, output) => {
 	var start = new Date();
   await next();

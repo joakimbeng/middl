@@ -407,3 +407,19 @@ test('use another middl instance as middleware with path', async t => {
 	t.same(result, output);
 	t.is(result.c, 4);
 });
+
+test('use generators as middleware', async t => {
+	const input = {a: 1};
+	const output = {b: 2};
+	const app = middl();
+	app.use(function *(input, output, next) {
+		yield next();
+		output.c *= 2;
+	});
+	app.use((input, output) => {
+		output.c = input.a;
+	});
+	const result = await app.run(input, output);
+	t.same(result, output);
+	t.is(result.c, 2);
+});
