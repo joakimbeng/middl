@@ -2,7 +2,7 @@
 
 ![middl logo](https://cdn.rawgit.com/joakimbeng/middl/master/media/middl.svg)
 
-[![Build status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![NPM version][npm-image]][npm-url] [![js-xo-style][codestyle-image]][codestyle-url]
+[![Build status][travis-image]][travis-url] [![Coverage Status][coveralls-image]][coveralls-url] [![NPM version][npm-image]][npm-url] [![XO code style][codestyle-image]][codestyle-url]
 
 > A generic middleware library, inspired by Express and suitable for anything
 
@@ -163,7 +163,7 @@ Returns: `app` for chaining.
 
 | Name | Type | Description |
 |------|------|-------------|
-| conditions | `Object` | The middleware will only be run if the current `input` matches this object |
+| conditions | `Object` | The middleware will only be run if the current `input` [matches](#how-the-conditions-are-matched) this object |
 | path | `String` | An optional mount path for the middleware (only applicable if [`options.pathProperty`](#optionspathproperty) is set) |
 | fn | `Function` | The middleware function |
 
@@ -179,6 +179,16 @@ const get = app.match({method: 'GET'});
 get('/test', (req, res) => { ... });
 ```
 
+##### How the conditions are matched
+
+Each [own property](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/hasOwnProperty) of the `conditions` object are matched with the property with the same name in `input`, in the following way:
+
+If `conditions[property]` is a:
+
+* **regular expression**: `input[property]` must match the regular expression
+* **function**: the function will be called with `input[property]` as argument and should return a `boolean` indicating if the property matches (`true`) or not (`false`)
+* _**otherwise**_: `input[property]` must equal (`===`) `conditions[property]`
+
 ## License
 
 MIT © [Joakim Carlstein](http://joakim.beng.se)
@@ -190,4 +200,4 @@ MIT © [Joakim Carlstein](http://joakim.beng.se)
 [coveralls-url]: https://coveralls.io/github/joakimbeng/middl?branch=master
 [coveralls-image]: https://coveralls.io/repos/github/joakimbeng/middl/badge.svg?branch=master
 [codestyle-url]: https://github.com/sindresorhus/xo
-[codestyle-image]: https://img.shields.io/badge/code%20style-xo-brightgreen.svg?style=flat
+[codestyle-image]: https://img.shields.io/badge/code%20style-XO-5ed9c7.svg?style=flat
