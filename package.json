@@ -1,6 +1,6 @@
 {
   "name": "middl",
-  "version": "0.2.3",
+  "version": "0.2.4",
   "description": "A generic middleware library, inspired by Express and suitable for anything",
   "main": "src/index.js",
   "directories": {
