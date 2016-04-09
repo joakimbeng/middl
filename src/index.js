@@ -45,24 +45,27 @@ module.exports = exports = function middl(options) {
 	 *
 	 * @param {object} conditions
 	 * @param {string} path
-	 * @param {function} fn
+	 * @param {array} fns
 	 * @param {object} pathOptions
 	 * @returns {app}
 	 */
-	function addMiddleware(conditions, path, fn, opts) {
-		var middleware = {
-			conditions,
-			path,
-			fn,
-			stopOnMatch: fn.length > 2 || Boolean(opts.stopOnMatch),
-			paramKeys: []
-		};
-		if (middleware.path && options.pathProperty) {
-			middleware.path = pathToRegexp(middleware.path, middleware.paramKeys, {end: opts.end});
-		} else {
-			middleware.path = null;
+	function addMiddleware(conditions, path, fns, opts) {
+		for (var i = 0, len = fns.length; i < len; i++) {
+			var fn = fns[i];
+			var middleware = {
+				conditions,
+				path,
+				fn,
+				stopOnMatch: fn.length > 2 || Boolean(opts.stopOnMatch),
+				paramKeys: []
+			};
+			if (middleware.path && options.pathProperty) {
+				middleware.path = pathToRegexp(middleware.path, middleware.paramKeys, {end: opts.end});
+			} else {
+				middleware.path = null;
+			}
+			stack.push(middleware);
 		}
-		stack.push(middleware);
 		return app;
 	}
 
@@ -71,45 +74,48 @@ module.exports = exports = function middl(options) {
 	 *
 	 * @param {object} conditions
 	 * @param {string} path
-	 * @param {function} fn
+	 * @param {function} ...fn
 	 * @returns {app|function}
 	 */
-	function match(conditions, path, fn) {
+	function match(conditions, path) {
 		if (!conditions) {
 			throw new Error('Missing matching conditions!');
 		}
+		var fns = Array.prototype.slice.call(arguments, 2);
 		if (typeof path === 'function') {
-			fn = path;
+			fns.unshift(path);
 			path = null;
 		}
-		if (!fn) {
-			return function matchPartial(p, fn) {
+		if (!fns.length) {
+			return function matchPartial(p) {
+				var fns = Array.prototype.slice.call(arguments, 1);
 				if (typeof p === 'function') {
-					fn = p;
+					fns.unshift(p);
 					p = null;
 				}
-				return match(conditions, joinPaths(path, p), fn);
+				return match.apply(null, [conditions, joinPaths(path, p)].concat(fns));
 			};
 		}
-		return addMiddleware(conditions, path, fn, {stopOnMatch: true});
+		return addMiddleware(conditions, path, fns, {stopOnMatch: true});
 	}
 
 	/**
 	 * Use middleware, with optional path
 	 *
 	 * @param {string} path
-	 * @param {function} fn
+	 * @param {function} ...fn
 	 * @returns {app}
 	 */
-	function use(path, fn) {
-		if (!fn) {
-			fn = path;
+	function use(path) {
+		var fns = Array.prototype.slice.call(arguments, 1);
+		if (typeof path === 'function') {
+			fns.unshift(path);
 			path = null;
 		}
-		if (typeof fn !== 'function') {
+		if (typeof fns[0] !== 'function') {
 			throw new Error('Missing middleware function!');
 		}
-		return addMiddleware({}, path, fn, {end: false});
+		return addMiddleware({}, path, fns, {end: false});
 	}
 
 	/**

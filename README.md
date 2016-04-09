@@ -174,28 +174,28 @@ The Express like `app` function.
 
 Returns: `Promise` which is resolved when the whole stack of middleware have been run through, or the flow have been aborted by throwing an error/returning a rejected Promise or by not calling `next`.
 
-#### `app.use([path, ], fn)`
+#### `app.use([path, ], ...fn)`
 
 | Name | Type | Description |
 |------|------|-------------|
 | path | `String` | An optional mount path for the middleware (only applicable if [`options.pathProperty`](#optionspathproperty) is set) |
-| fn | `Function` | The middleware function |
+| ...fn | `Function` | The middleware function(s) |
 
 The middleware function signature should be similar to that of Express, i.e: `function ([err, ] input, output [, next]) { ... }`.
 
 Returns: `app` for chaining.
 
-#### `app.match(conditions [, path [, fn]])`
+#### `app.match(conditions [, path [, ...fn]])`
 
 | Name | Type | Description |
 |------|------|-------------|
 | conditions | `Object` | The middleware will only be run if the current `input` [matches](#how-the-conditions-are-matched) this object |
 | path | `String` | An optional mount path for the middleware (only applicable if [`options.pathProperty`](#optionspathproperty) is set) |
-| fn | `Function` | The middleware function |
+| ...fn | `Function` | The middleware function(s) |
 
 The middleware function signature should be similar to that of Express, i.e: `function ([err, ] input, output [, next]) { ... }`.
 
-Returns: `app` for chaining if `fn` is provided, otherwise a partially applied `function` will be returned, e.g:
+Returns: `app` for chaining if `...fn` is provided, otherwise a partially applied `function` will be returned, e.g:
 
 ```javascript
 // this:

@@ -436,3 +436,41 @@ test('use generators as middleware', async t => {
 	t.same(result, output);
 	t.is(result.c, 2);
 });
+
+test('use multiple middleware in the same function call', async t => {
+	const input = {a: 1};
+	const output = {b: 2};
+	const app = middl();
+	app.use(
+		function *(input, output, next) {
+			yield next();
+			output.c *= 2;
+		},
+		(input, output) => {
+			output.c = input.a;
+		}
+	);
+	const result = await app.run(input, output);
+	t.same(result, output);
+	t.is(result.c, 2);
+});
+
+test('multiple match middleware in the same function call', async t => {
+	const input = {path: '/test', a: 1};
+	const output = {b: 2};
+	const app = middl({pathProperty: 'path'});
+	app.match(
+		{a: 1},
+		'/test',
+		function *(input, output, next) {
+			yield next();
+			output.c *= 2;
+		},
+		(input, output) => {
+			output.c = input.a;
+		}
+	);
+	const result = await app.run(input, output);
+	t.same(result, output);
+	t.is(result.c, 2);
+});
