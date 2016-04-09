@@ -49,15 +49,16 @@ module.exports = exports = function middl(options) {
 	 * @param {object} pathOptions
 	 * @returns {app}
 	 */
-	function addMiddleware(conditions, path, fn, pathOptions) {
+	function addMiddleware(conditions, path, fn, opts) {
 		var middleware = {
 			conditions,
 			path,
 			fn,
+			stopOnMatch: fn.length > 2 || Boolean(opts.stopOnMatch),
 			paramKeys: []
 		};
 		if (middleware.path && options.pathProperty) {
-			middleware.path = pathToRegexp(middleware.path, middleware.paramKeys, pathOptions);
+			middleware.path = pathToRegexp(middleware.path, middleware.paramKeys, {end: opts.end});
 		} else {
 			middleware.path = null;
 		}
@@ -90,7 +91,7 @@ module.exports = exports = function middl(options) {
 				return match(conditions, joinPaths(path, p), fn);
 			};
 		}
-		return addMiddleware(conditions, path, fn);
+		return addMiddleware(conditions, path, fn, {stopOnMatch: true});
 	}
 
 	/**
@@ -136,19 +137,21 @@ module.exports = exports = function middl(options) {
 				fn = co.wrap(fn);
 			}
 			var nextInput = getNextInput(m, input, options);
+			var promise;
 			if (fnLen === 4) {
-				return Promise.resolve(fn(err, nextInput, output, next))
+				promise = Promise.resolve(fn(err, nextInput, output, next));
+			} else if (fnLen === 3) {
+				promise = Promise.resolve(fn(nextInput, output, next));
+			} else {
+				promise = Promise.resolve(fn(nextInput, output));
+			}
+			if (m.stopOnMatch) {
+				return promise
 					.then(function () {
 						return output;
 					});
 			}
-			if (fnLen === 3) {
-				return Promise.resolve(fn(nextInput, output, next))
-					.then(function () {
-						return output;
-					});
-			}
-			return Promise.resolve(fn(nextInput, output))
+			return promise
 				.then(function () {
 					return next();
 				})

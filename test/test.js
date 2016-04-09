@@ -243,6 +243,21 @@ test('matching middleware equal match', async t => {
 	t.is(result.c, 10);
 });
 
+test('multiple matching middleware without next', async t => {
+	const input = {a: 1};
+	const output = {b: 2};
+	const app = middl();
+	app.match({a: 1}, (input, output) => {
+		output.c = 10;
+	});
+	app.match({a: 1}, () => {
+		t.fail('Should not run!');
+	});
+	const result = await app.run(input, output);
+	t.same(result, output);
+	t.is(result.c, 10);
+});
+
 test('matching middleware ignores inherited properties', async t => {
 	const input = {a: 1};
 	const output = {b: 2};
@@ -299,12 +314,10 @@ test('matching middleware partial application', async t => {
 	app.aOne((input, output) => {
 		output.c = input.a;
 	});
-	app.aOne((input, output) => {
-		output.c += 2;
-	});
+
 	const result = await app.run(input, output);
 	t.same(result, output);
-	t.is(result.c, 3);
+	t.is(result.c, 1);
 });
 
 test('use middleware with pathProperty option', async t => {

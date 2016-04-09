@@ -86,6 +86,10 @@ app.use((err, input, output, next) => {
 app.match({val: 'hello'}, (input, output) => {
 	output.response = 'world';
 });
+// this will *not* be run because the former middleware did not call next:
+app.match({val: 'hello'}, (input, output) => {
+	output.response = 'you';
+});
 // this won't run because the conditions ({val: 'hi'}) does not match the input
 app.match({val: 'hi'}, (input, output) => {
 	output.response = 'there';
