@@ -49,7 +49,7 @@ app.use((input, output) => {
 // a time measuring logger:
 app.use((input, output, next) => {
 	var start = new Date();
-  next()
+	next()
 		.then(() => {
 			var ms = new Date() - start;
 			console.log('Done in %s ms', ms);
@@ -65,7 +65,7 @@ app.use(function *(input, output, next) {
 // or when using Babel and async/await:
 app.use(async (input, output, next) => {
 	var start = new Date();
-  await next();
+	await next();
 	var ms = new Date() - start;
 	console.log('Done in %s ms', ms);
 });
@@ -155,7 +155,7 @@ Returns: [`app`](#appinput-output)
 
 #### `options.pathProperty`
 
-Type: `String`  
+Type: `String`
 
 Used to enable the possibility to use a mount path when adding middleware ([see example above](#example-byoe)).
 
