@@ -47,7 +47,7 @@ app.use((input, output) => {
 });
 
 // a time measuring logger:
-app.use((input, output) => {
+app.use((input, output, next) => {
 	var start = new Date();
   next()
 		.then(() => {
@@ -56,18 +56,39 @@ app.use((input, output) => {
 		});
 });
 // or even prettier with generator functions:
-app.use(function *(input, output) {
+app.use(function *(input, output, next) {
 	var start = new Date();
 	yield next();
 	var ms = new Date() - start;
 	console.log('Done in %s ms', ms);
 });
 // or when using Babel and async/await:
-app.use(async (input, output) => {
+app.use(async (input, output, next) => {
 	var start = new Date();
   await next();
 	var ms = new Date() - start;
 	console.log('Done in %s ms', ms);
+});
+
+
+// an error handling middleware
+app.use((err, input, output, next) => {
+	if (err) {
+		console.error(err);
+		// by not calling next() we abort the chain
+	} else {
+		next();
+	}
+});
+
+// conditional middleware
+// this will be run because the conditions ({val: 'hello'}) matches the input:
+app.match({val: 'hello'}, (input, output) => {
+	output.response = 'world';
+});
+// this won't run because the conditions ({val: 'hi'}) does not match the input
+app.match({val: 'hi'}, (input, output) => {
+	output.response = 'there';
 });
 
 // pass in the initial `input` and `output` objects
@@ -75,6 +96,7 @@ app.use(async (input, output) => {
 app.run({val: 'hello'}, {})
 	.then(output => {
 		// output.prop === 2
+		// output.response = 'world'
 	});
 ```
 
