@@ -437,6 +437,23 @@ test('use generators as middleware', async t => {
 	t.is(result.c, 2);
 });
 
+test('next should always return a promise (issue #2)', t => {
+	const input = {a: 1};
+	const output = {b: 2};
+	const app = middl({pathProperty: 'url'});
+	app.use((input, output, next) => {
+		return next().then(() => {
+			output.c = 2;
+		});
+	});
+	app.match({a: 1}, '/no-match', (input, output) => {
+		output.c = input.a;
+	});
+	t.notThrows(() => {
+		app.run(input, output);
+	});
+});
+
 test('use multiple middleware in the same function call', async t => {
 	const input = {a: 1};
 	const output = {b: 2};
