@@ -137,7 +137,7 @@ module.exports = exports = function middl(options) {
 				throw err;
 			}
 			if (!fn) {
-				return output;
+				return Promise.resolve(output);
 			}
 			if (isGeneratorFn(fn)) {
 				fn = co.wrap(fn);
@@ -164,11 +164,11 @@ module.exports = exports = function middl(options) {
 				.catch(next);
 		}
 
-		return new Promise(function (resolve, reject) {
+		return new Promise(function (resolve) {
 			try {
 				resolve(next());
 			} catch (err) {
-				reject(next(err));
+				resolve(next(err));
 			}
 		});
 	}
