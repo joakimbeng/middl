@@ -491,3 +491,17 @@ test('multiple match middleware in the same function call', async t => {
 	t.same(result, output);
 	t.is(result.c, 2);
 });
+
+test('app.run() should be patchable', async t => {
+	const app = middl();
+	const _run = app.run;
+	app.run = (input, output) => {
+		input.patched = true;
+		return _run(input, output);
+	};
+	app.use((input, output) => {
+		output.val = input.patched ? 'patched' : 'not patched';
+	});
+	const result = await app({}, {});
+	t.is(result.val, 'patched');
+});

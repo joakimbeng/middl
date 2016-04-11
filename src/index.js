@@ -33,7 +33,7 @@ module.exports = exports = function middl(options) {
 	 * @returns {promise}
 	 */
 	function app(input, output) {
-		return run(input, output);
+		return app.run(input, output);
 	}
 	// attach public app api:
 	app.match = match;
